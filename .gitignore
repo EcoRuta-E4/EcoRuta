@@ -1,0 +1,30 @@
+# Secretos y configuración local
+.env
+.env.*
+!.env.example
+
+# Dependencias y compilados
+node_modules/
+dist/
+build/
+target/
+out/
+.next/
+.gradle/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Registros y temporales
+*.log
+npm-debug.log*
+.cache/
+tmp/
+
+# Editores y sistema
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
