@@ -17,22 +17,29 @@ Aplicación web para gestionar y consultar la recolección de basura en Buenaven
 | # | Rol | Responsable de | Integrante | GitHub |
 |---|-----|----------------|------------|--------|
 | 1 | Líder y coordinación | Repositorio, README, releases, revisión de pull requests y evidencia | Victor Manuel Vera Angulo | @VictorManuelVera |
-| 2 | Backend 1 | Autenticación, seguridad, vehículos, endpoint de posiciones | _por completar_ | _por completar_ |
-| 3 | Backend 2 | Conductores, barrios, rutas, programación y validaciones | _por completar_ | _por completar_ |
-| 4 | Datos y despliegue | PostgreSQL, migraciones, datos de prueba, publicación | _por completar_ | _por completar_ |
-| 5 | Frontend 1 | Login, dashboard, vehículos, barrios, rutas | _por completar_ | _por completar_ |
-| 6 | Frontend 2 | Conductores, mapa, programación, simulación en el mapa | _por completar_ | _por completar_ |
-| 7 | Ciudadano y calidad | Panel ciudadano, pruebas, capturas, video | _por completar_ | _por completar_ |
+| 2 | Backend 1 (líder de backend) | Autenticación, seguridad, vehículos, endpoint de posiciones y simulación | Andrés Fernández | _por completar_ |
+| 3 | Backend 2 | Conductores, barrios, rutas, programación, validaciones e indicadores | Rubén Camacho | _por completar_ |
+| 4 | Base de datos y despliegue | PostgreSQL en Neon, migraciones, datos de prueba y publicación | Victor Manuel Vera Angulo | @VictorManuelVera |
+| 5 | Frontend 1 (líder de frontend) | Login, dashboard, vehículos, barrios y rutas | Walter David Estupiñán | _por completar_ |
+| 6 | Frontend 2 | Proyecto base del frontend, conductores, mapa, programación y simulación en el mapa | Johan Alexander Murillo Sinisterra | _por completar_ |
+| 7 | Calidad y evidencia | Pruebas, capturas, instrucciones de verificación y video | _por completar_ (dancenot02) | _por completar_ |
+| 8 | Panel ciudadano | Diseño y construcción del panel ciudadano y puntos de recolección | Luis David Arias | _por completar_ |
 
 ## Tecnologías
 
 | Capa | Tecnología |
 |------|------------|
-| Base de datos | PostgreSQL (migraciones que crean la base desde cero) |
-| Backend | _por definir_ |
-| Frontend | _por definir_ |
-| Mapa | _por definir_ (centrado en Buenaventura) |
-| Despliegue | _por definir_ |
+| Frontend | React con HTML y CSS (componentes JSX), Vite y React Router |
+| Estilos | Tailwind CSS o CSS propio (por elegir) |
+| Mapa | Leaflet y React Leaflet, con mapas de OpenStreetMap, centrado en Buenaventura |
+| Backend | Node.js con Express (API REST) |
+| Acceso a datos | pg (node-postgres) y node-pg-migrate para las migraciones |
+| Seguridad | JWT para la sesión, bcrypt para las contraseñas y Zod para validar los datos |
+| Base de datos | PostgreSQL alojado en Neon (migraciones que crean la base desde cero) |
+| Pruebas | Vitest y Supertest para los endpoints; registro de pruebas manuales en `docs/pruebas.md` |
+| Despliegue | Netlify (frontend) y Render (backend) |
+
+**Sobre el frontend:** React no reemplaza a HTML ni a CSS, los organiza en componentes. Cada componente devuelve etiquetas HTML escritas en JSX, y los estilos siguen siendo CSS. Hay un solo `index.html` y React cambia lo que se muestra en cada pantalla.
 
 ## Estructura del repositorio
 
@@ -47,7 +54,7 @@ docs/evidencia/       Capturas y videos de cada entrega
 
 ## Cómo ejecutar el proyecto
 
-_Pendiente: se completa cuando el equipo cierre las tecnologías._
+_Pendiente: se completa en la entrega 1 con los comandos reales del backend y el frontend._
 
 1. Requisitos.
 2. Variables de entorno: copiar `.env.example` a `.env` y completar los valores.
