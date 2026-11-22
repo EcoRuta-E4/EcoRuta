@@ -1,0 +1,112 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "EcoRuta - Autenticación y Admin (ECO-3)",
+  "collectionId": "ecoruta-auth-eco-3",
+  "dateExported": "2026-11-21T22:45:00.000Z",
+  "version": "1.1",
+  "folders": [],
+  "requests": [
+    {
+      "_id": "req-health",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "1. Verificación de Salud (Health Check)",
+      "url": "http://localhost:3000/api/health",
+      "method": "GET",
+      "sortNum": 10000,
+      "created": "2026-11-21T22:45:00.000Z",
+      "modified": "2026-11-21T22:45:00.000Z",
+      "headers": []
+    },
+    {
+      "_id": "req-login-valido",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "2. Iniciar Sesión - Exitoso (RF-01)",
+      "url": "http://localhost:3000/api/auth/login",
+      "method": "POST",
+      "sortNum": 20000,
+      "created": "2026-11-21T22:45:00.000Z",
+      "modified": "2026-11-21T22:45:00.000Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"correo\": \"admin@ecoruta.co\",\n  \"contrasena\": \"Admin123456*\"\n}",
+        "form": []
+      }
+    },
+    {
+      "_id": "req-login-invalido",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "3. Iniciar Sesión - Credenciales Incorrectas (RF-02)",
+      "url": "http://localhost:3000/api/auth/login",
+      "method": "POST",
+      "sortNum": 30000,
+      "created": "2026-11-21T22:45:00.000Z",
+      "modified": "2026-11-21T22:45:00.000Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"correo\": \"admin@ecoruta.co\",\n  \"contrasena\": \"clave-equivocada\"\n}",
+        "form": []
+      }
+    },
+    {
+      "_id": "req-perfil",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "4. Obtener Perfil - Autenticado (RF-01, RF-04)",
+      "url": "http://localhost:3000/api/auth/perfil",
+      "method": "GET",
+      "sortNum": 40000,
+      "created": "2026-11-21T22:45:00.000Z",
+      "modified": "2026-11-21T22:45:00.000Z",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer PEGA_AQUI_TU_TOKEN_JWT"
+        }
+      ]
+    },
+    {
+      "_id": "req-admin-verificar",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "5. Panel Admin - Verificar Permisos (RF-04)",
+      "url": "http://localhost:3000/api/admin/verificar",
+      "method": "GET",
+      "sortNum": 50000,
+      "created": "2026-11-21T22:45:00.000Z",
+      "modified": "2026-11-21T22:45:00.000Z",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer PEGA_AQUI_TU_TOKEN_JWT"
+        }
+      ]
+    },
+    {
+      "_id": "req-logout",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "6. Cerrar Sesión (RF-03)",
+      "url": "http://localhost:3000/api/auth/logout",
+      "method": "POST",
+      "sortNum": 60000,
+      "created": "2026-11-21T22:45:00.000Z",
+      "modified": "2026-11-21T22:45:00.000Z",
+      "headers": []
+    }
+  ]
+}
