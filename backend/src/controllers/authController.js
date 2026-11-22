@@ -2,6 +2,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { query } from '../config/db.js';
 
+// Hash bcrypt de una contraseña aleatoria que nadie conoce. Se usa cuando el correo no existe,
+// para que la comparación tarde lo mismo que con un usuario real.
+const HASH_RELLENO = bcrypt.hashSync(`relleno-${Math.random()}`, 12);
+
 /**
  * Iniciar sesión (RF-01, RF-02, RNF-01, RNF-02)
  */
@@ -18,28 +22,25 @@ export const login = async (req, res, next) => {
 
     const usuario = rows[0];
 
-    // RF-02: Mensaje comprensible con credenciales incorrectas
-    if (!usuario) {
+    // RNF-01: Validación de contraseña con hash bcrypt.
+    // Si el correo no existe, se compara igual contra un hash de relleno, para que la respuesta
+    // tarde lo mismo y no se pueda adivinar qué correos están registrados.
+    const contrasenaValida = await bcrypt.compare(contrasena, usuario ? usuario.contrasena_hash : HASH_RELLENO);
+
+    // RF-02: Mensaje comprensible con credenciales incorrectas (el mismo si el correo no existe)
+    if (!usuario || !contrasenaValida) {
       return res.status(401).json({
         error: 'Credenciales incorrectas',
         mensaje: 'Correo o contraseña incorrectos. Verifica tus datos e intenta nuevamente.',
       });
     }
 
-    // Verificar si la cuenta está activa
+    // La cuenta inactiva se informa solo después de verificar la contraseña,
+    // así no se revela qué correos existen.
     if (!usuario.activo) {
       return res.status(403).json({
         error: 'Cuenta inactiva',
         mensaje: 'Tu cuenta de usuario ha sido desactivada. Contacta al administrador del sistema.',
-      });
-    }
-
-    // RNF-01: Validación de contraseña con hash bcrypt
-    const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena_hash);
-    if (!contrasenaValida) {
-      return res.status(401).json({
-        error: 'Credenciales incorrectas',
-        mensaje: 'Correo o contraseña incorrectos. Verifica tus datos e intenta nuevamente.',
       });
     }
 

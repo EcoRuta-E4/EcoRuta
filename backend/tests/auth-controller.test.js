@@ -46,7 +46,8 @@ test('Controller - Login: retorna 401 si el usuario no existe (RF-02)', async ()
   }
 });
 
-test('Controller - Login: retorna 403 si el usuario está inactivo', async () => {
+test('Controller - Login: retorna 403 si el usuario está inactivo y la contraseña es correcta', async () => {
+  const hash = await bcrypt.hash('Clave1234*', 10);
   const originalQuery = pool.query;
   pool.query = async () => ({
     rows: [
@@ -54,7 +55,7 @@ test('Controller - Login: retorna 403 si el usuario está inactivo', async () =>
         id: 1,
         nombre: 'Admin Inactivo',
         correo: 'inactivo@ecoruta.co',
-        contrasena_hash: 'algun-hash',
+        contrasena_hash: hash,
         rol: 'admin',
         activo: false,
       },
@@ -71,6 +72,37 @@ test('Controller - Login: retorna 403 si el usuario está inactivo', async () =>
 
     assert.equal(res.statusCode, 403);
     assert.equal(res.body.error, 'Cuenta inactiva');
+  } finally {
+    pool.query = originalQuery;
+  }
+});
+
+test('Controller - Login: cuenta inactiva con contraseña incorrecta responde 401, sin revelar que existe', async () => {
+  const hash = await bcrypt.hash('Clave1234*', 10);
+  const originalQuery = pool.query;
+  pool.query = async () => ({
+    rows: [
+      {
+        id: 1,
+        nombre: 'Admin Inactivo',
+        correo: 'inactivo@ecoruta.co',
+        contrasena_hash: hash,
+        rol: 'admin',
+        activo: false,
+      },
+    ],
+  });
+
+  try {
+    const req = {
+      body: { correo: 'inactivo@ecoruta.co', contrasena: 'otra-clave' },
+    };
+    const res = createMockRes();
+
+    await login(req, res, (err) => assert.fail(err));
+
+    assert.equal(res.statusCode, 401);
+    assert.equal(res.body.error, 'Credenciales incorrectas');
   } finally {
     pool.query = originalQuery;
   }
