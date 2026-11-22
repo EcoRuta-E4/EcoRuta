@@ -1,25 +1,26 @@
 // Crea (o actualiza) el administrador inicial. RF-05.
-// Uso:  ADMIN_CORREO=admin@ecoruta.co ADMIN_CONTRASENA='una-clave-larga' npm run crear-admin
+// Uso:  Lee ADMIN_EMAIL (o ADMIN_CORREO) y ADMIN_PASSWORD (o ADMIN_CONTRASENA) del .env
+//       npm run crear-admin
 //       (opcional: ADMIN_NOMBRE='Administrador EcoRuta')
-// La contrasena se guarda con bcrypt; nunca se escribe en el repositorio.
+// La contrasena se guarda con bcrypt; nunca se escribe en el repositorio (RNF-01).
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import pg from 'pg';
 
-const correo = (process.env.ADMIN_CORREO || '').trim().toLowerCase();
-const contrasena = process.env.ADMIN_CONTRASENA || '';
+const correo = (process.env.ADMIN_EMAIL || process.env.ADMIN_CORREO || '').trim().toLowerCase();
+const contrasena = process.env.ADMIN_PASSWORD || process.env.ADMIN_CONTRASENA || '';
 const nombre = (process.env.ADMIN_NOMBRE || 'Administrador EcoRuta').trim();
 
 if (!process.env.DATABASE_URL) {
-  console.error('Falta DATABASE_URL en backend/.env');
+  console.error('Falta DATABASE_URL en backend/.env o variables de entorno');
   process.exit(1);
 }
 if (!correo || !correo.includes('@')) {
-  console.error('Define ADMIN_CORREO con un correo valido.');
+  console.error('Define ADMIN_EMAIL (o ADMIN_CORREO) con un correo valido.');
   process.exit(1);
 }
 if (contrasena.length < 8) {
-  console.error('ADMIN_CONTRASENA debe tener al menos 8 caracteres.');
+  console.error('ADMIN_PASSWORD (o ADMIN_CONTRASENA) debe tener al menos 8 caracteres.');
   process.exit(1);
 }
 
