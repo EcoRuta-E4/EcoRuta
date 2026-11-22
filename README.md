@@ -22,7 +22,7 @@ Aplicación web para gestionar y consultar la recolección de basura en Buenaven
 | 4 | Base de datos y despliegue | PostgreSQL en Neon, migraciones, datos de prueba y publicación | Victor Manuel Vera Angulo | @VictorManuelVera |
 | 5 | Frontend 1 (líder de frontend) | Login, dashboard, vehículos, barrios y rutas | Walter David Estupiñán | _por completar_ |
 | 6 | Frontend 2 | Proyecto base del frontend, conductores, mapa, programación y simulación en el mapa | Johan Alexander Murillo Sinisterra | _por completar_ |
-| 7 | Calidad y evidencia | Pruebas, capturas, instrucciones de verificación y video | _por completar_ (dancenot02) | _por completar_ |
+| 7 | Calidad y evidencia | Pruebas, capturas, instrucciones de verificación y video | Jhon Orobio (dancenot02) | _por completar_ |
 | 8 | Panel ciudadano | Diseño y construcción del panel ciudadano y puntos de recolección | Luis David Arias | _por completar_ |
 
 ## Tecnologías
