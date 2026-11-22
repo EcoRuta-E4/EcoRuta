@@ -1,16 +1,19 @@
-# React + Vite
+# EcoRuta - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Aplicacion frontend desarrollada con React, Vite y React Router.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js LTS
 
-## React Compiler
+## Instalacion y ejecucion en local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Entra a la carpeta del frontend: cd frontend
+2. Instala las dependencias: npm install
+3. Configura las variables de entorno copiando .env.example a .env (las variables deben iniciar con VITE_).
+4. Inicia el servidor de desarrollo: npm run dev
+5. Abre en el navegador: http://localhost:5173
 
-## Expanding the Oxlint configuration
+## Compilacion para produccion
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+npm run build

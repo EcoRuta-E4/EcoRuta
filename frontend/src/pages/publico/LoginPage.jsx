@@ -1,4 +1,4 @@
-﻿export default function LoginPage() {
+export default function LoginPage() {
   return (
     <main>
       <h1>Iniciar sesión</h1>
