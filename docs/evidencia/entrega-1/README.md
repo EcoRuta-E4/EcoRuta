@@ -11,7 +11,7 @@ Todas las capturas son del **23/11/2026**. La interfaz se ejecutó en local (`ht
 | # | Requisito de la entrega | Evidencia | Estado |
 |---|---|---|---|
 | 1 | Repositorio público con README (integrantes, organización, tecnologías) | [README principal](../../../README.md) | Listo |
-| 2 | Release `semana-1` que coincide con el código mostrado | Enlace del encabezado | Pendiente de publicar |
+| 2 | Release `semana-1` que coincide con el código mostrado | Enlace del encabezado | Listo |
 | 3 | PostgreSQL con migraciones desde cero | [Migraciones 1–8](equipo/neon-migraciones-1-8.jpg), [8–15](equipo/neon-migraciones-8-15.jpg) y [base local vacía](../../pruebas.md#42-postgresql-1712-local-lo-usado-en-esta-entrega) | Listo |
 | 4 | Procedimiento para crear el administrador inicial | `npm run crear-admin` ([script](../../../backend/scripts/crear-admin.js)); [usuarios en Neon](equipo/neon-usuarios-consulta.jpg) y [estructura](equipo/neon-usuarios-estructura.jpg) | Listo |
 | 5 | Datos mínimos de prueba o script de carga | `npm run seed` (`database/seeds`); [conteo por tabla](equipo/neon-conteo-tablas.jpg), [turnos](equipo/neon-turnos-datos.jpg), [barrios](equipo/neon-barrios-datos.jpg) | Listo |
