@@ -7,7 +7,7 @@ Basada en el documento técnico v1.1 (sección 7), ECO-2, ECO-19, ECO-20 y ECO-3
 
 - **Motor:** PostgreSQL en Neon (proyecto `ecoruta`, ramas `main` y `dev`). Sin Supabase, como exige el profesor.
 - **Cómo se crea:** solo con migraciones (`database/migrations`, node-pg-migrate). Nadie crea tablas a mano en Neon.
-- **Contenido:** 12 tablas del modelo + 2 vistas + 2 funciones de apoyo para el dashboard y los conflictos.
+- **Contenido:** 12 tablas del modelo + 2 tablas de geografía (`localidades`, `comunas`) + 2 vistas + 2 funciones de apoyo para el dashboard y los conflictos.
 - **Convenciones:** nombres en español, sin tildes, minúsculas con guion bajo. Fechas con zona horaria (`timestamptz`). "Desactivar" no borra: cambia `activo` o `estado`.
 
 ## 2. Diagrama entidad-relación
@@ -124,8 +124,9 @@ erDiagram
 | 11 | `…011_crear-posiciones` | Historial de posiciones, índice por vehículo y fecha | RF-28 |
 | 12 | `…012_crear-ultima-posicion` | Una fila por camión | RF-28, RF-29 |
 | 13 | `…013_vistas-y-funciones` | Vistas del dashboard y función de conflictos | RF-21 a RF-24 |
+| 14 | `…014_crear-localidades-comunas` | `localidades` (2) y `comunas` (12); `barrios.comuna_id` reemplaza la columna de texto `comuna` | RF-13, RF-31 |
 
-Todas tienen sección `-- Down Migration`; se probó aplicar las 13, deshacerlas todas y volver a aplicarlas.
+Todas tienen sección `-- Down Migration`; se probó aplicar las 14, deshacerlas todas y volver a aplicarlas.
 
 ## 4. Reglas que garantiza la base de datos
 
@@ -188,11 +189,14 @@ Las dos sentencias van en una transacción. El mapa lee solo `ultima_posicion`.
 
 ## 6. Datos de prueba
 
-`database/seeds/001_datos_prueba.sql` (ficticio): 3 turnos, 8 barrios, 5 vehículos (uno por cada estado), 4 conductores, 4 rutas (una suspendida y una sin trazado), puntos de recolección y 2 programaciones para el camión 1 y el camión 2 de la simulación.
+`database/seeds/000_geografia.sql` (real): los 104 barrios oficiales de Buenaventura, cada uno con su comuna. Se carga antes que el archivo de prueba y se puede repetir.
+
+`database/seeds/001_datos_prueba.sql` (ficticio): 3 turnos, 5 vehículos (uno por cada estado), 4 conductores, 4 rutas (una suspendida y una sin trazado), puntos de recolección y 2 programaciones para el camión 1 y el camión 2 de la simulación.
 
 - Es útil para probar las validaciones: TUR104 está en mantenimiento, TUR105 fuera de servicio, el conductor `1111111104` está inactivo, "Ruta 3" suspendida y "Ruta 4" sin trazado.
 - Los trazados son de ejemplo y pueden caer fuera de las calles: se rehacen desde el mapa (ECO-18).
-- Los nombres de barrios son reales de Buenaventura, pero la comuna queda vacía hasta confirmarla.
+- Los barrios de las rutas de ejemplo salen del listado oficial (`000_geografia.sql`). Hay dos barrios "Alfonso López": se llaman *Alfonso López Pumarejo* (comuna 3) y *Alfonso López Michelsen* (comuna 12).
+- La comuna 8 tiene 7 barrios según el listado oficial; el mapa agrega "Olímpico", pendiente de confirmar.
 - **El administrador no está en el seed**: se crea con `npm run crear-admin`.
 
 ## 7. Puesta en marcha
@@ -210,7 +214,7 @@ Las dos sentencias van en una transacción. El mapa lee solo `ultima_posicion`.
    y las dependencias: `npm install pg dotenv bcrypt` y `npm install -D node-pg-migrate`.
 4. Desde `backend`:
    ```bash
-   npm run migrate up                      # crea las 12 tablas, las vistas y las funciones
+   npm run migrate up                      # crea las tablas, las vistas, las funciones, las 2 localidades y las 12 comunas
    npm run seed                            # datos de prueba (con -- --reset vacía y recarga)
    ADMIN_CORREO=admin@ecoruta.co ADMIN_CONTRASENA='clave-larga' npm run crear-admin
    ```
