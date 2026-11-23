@@ -63,6 +63,39 @@ _Pendiente: se completa en la entrega 1 con los comandos reales del backend y el
 5. Crear el administrador inicial.
 6. Iniciar backend y frontend.
 
+## Cómo correr las pruebas
+
+El backend usa **Vitest** y **Supertest**. La suite principal simula PostgreSQL, así que no necesita base de datos.
+
+```bash
+cd backend
+npm install
+npm test            # ejecuta toda la suite
+npm run test:watch  # modo interactivo
+```
+
+Resultado actual: **56 pruebas aprobadas** contra una base real (54 si se corre sin base; las 2 de integración se omiten).
+
+Cubre:
+
+- login correcto e incorrecto, cuenta inactiva, validación de datos y falta de `JWT_SECRET`;
+- rutas del panel sin token (401), token inválido (401) y rol distinto de administrador (403);
+- dashboard: indicadores, servicios de hoy, filtros y 503 cuando faltan migraciones;
+- CORS y JSON mal formado.
+
+Con PostgreSQL real (rama `test` de Neon o una base local) para no tocar los datos de `dev`:
+
+```powershell
+$env:TEST_DATABASE_URL="postgresql://usuario:clave@host:puerto/ecoruta?sslmode=require"
+npm test
+```
+
+El registro detallado (paso, resultado esperado, resultado obtenido y fecha) está en
+[`docs/pruebas.md`](docs/pruebas.md), con las respuestas guardadas en `docs/evidencia/`.
+Las pruebas de vehículos y conductores (RNF-16) quedan pendientes como API porque esos endpoints
+todavía no existen en `Dev`; la base sí está verificada (rechaza placa, documento y licencia
+duplicados con `23505`).
+
 ## Verificación del acceso administrativo
 
 _Pendiente (Entrega 1): pasos para iniciar y cerrar sesión, ver el bloqueo de rutas sin sesión y abrir el dashboard._
