@@ -176,6 +176,17 @@ se mantiene por compatibilidad, pero funciona con cualquier PostgreSQL alcanzabl
 | `docs/evidencia/m-08b-servicios-hoy-filtrado-200.json` | Mismo endpoint con `zona=Isla&estado=en_curso` |
 | `docs/evidencia/m-08c-servicios-hoy-vacio-200.json` | Filtro `estado=conflicto` → lista vacía |
 | `docs/evidencia/m-09-rnf16-restricciones.json` | Rechazos `23505` de placa, documento y licencia repetidos |
+| `docs/evidencia/entrega-1/equipo/*.jpg` | 12 capturas de apoyo enviadas por el integrante de ECO-12: demo de los endpoints contra Neon `dev` y consultas de verificación en el SQL Editor |
+
+### Evidencia de apoyo del equipo
+
+Las capturas de `docs/evidencia/entrega-1/equipo/` las tomó el integrante de **ECO-12** en su equipo,
+contra la rama `dev` de Neon, el 2026-11-23. Confirman login, los 18 indicadores, los 400/401 y que
+las 15 migraciones y el seed están aplicados. El detalle de cada archivo está en el `README.md` de
+esa carpeta.
+
+No sustituyen la evidencia de la URL pública: no muestran interfaz, mapa, vehículos, conductores,
+rutas, programación ni simulación.
 
 > El JWT de `m-05` expira en 8 horas y se emitió con el `JWT_SECRET` local de este PC; no sirve
 > fuera de él.
