@@ -1,5 +1,5 @@
 -- Datos de prueba de EcoRuta. TODO es ficticio: sirve para probar y para la demostracion.
--- Los barrios son nombres reales de Buenaventura; la comuna se deja vacia hasta confirmarla.
+-- Los barrios reales (con su comuna) los carga 000_geografia.sql, que se ejecuta antes que este archivo.
 -- Los trazados y puntos son de ejemplo: rehacerlos desde el mapa del panel (entrega 3).
 -- El administrador NO se crea aqui: se crea con `npm run crear-admin` (contrasena con bcrypt).
 -- Se ejecuta con `npm run seed` (o `npm run seed -- --reset` para vaciar y volver a cargar).
@@ -9,11 +9,6 @@ INSERT INTO turnos (nombre, hora_inicio, hora_fin) VALUES
   ('Mañana', '06:00', '14:00'),
   ('Tarde',  '14:00', '22:00'),
   ('Noche',  '22:00', '06:00');
-
--- Barrios (RF-13)
-INSERT INTO barrios (nombre) VALUES
-  ('Bellavista'), ('Lleras'), ('Pueblo Nuevo'), ('Miraflores'),
-  ('Cristal'), ('Rockefeller'), ('Santa Cruz'), ('Alfonso López');
 
 -- Vehiculos (RF-07, RF-09): uno por cada estado
 INSERT INTO vehiculos (placa, numero_interno, marca, modelo, capacidad_toneladas, estado) VALUES
@@ -32,9 +27,9 @@ INSERT INTO conductores (nombres, apellidos, documento, telefono, numero_licenci
 
 -- Rutas con trazado de ejemplo (formato Leaflet [lat, lng]) (RF-14, RF-16)
 INSERT INTO rutas (nombre, descripcion, tipo_servicio, estado, trazado) VALUES
-  ('Ruta 1 · Centro', 'Recorrido por Bellavista, Lleras y Pueblo Nuevo', 'recoleccion', 'activa',
+  ('Ruta 1 · Centro', 'Recorrido por Bella Vista, Alberto Lleras y Kennedy', 'recoleccion', 'activa',
    '[[3.8801,-77.0312],[3.8815,-77.0290],[3.8832,-77.0265],[3.8850,-77.0240],[3.8868,-77.0218]]'::jsonb),
-  ('Ruta 2 · Sur', 'Recorrido por Miraflores, Cristal y Rockefeller', 'recoleccion', 'activa',
+  ('Ruta 2 · Sur', 'Recorrido por Miraflores, El Cristal y Rockefeller', 'recoleccion', 'activa',
    '[[3.8760,-77.0330],[3.8745,-77.0305],[3.8730,-77.0280],[3.8718,-77.0255]]'::jsonb),
   ('Ruta 3 · Barrido Avenida', 'Barrido de la avenida principal', 'barrido', 'suspendida',
    '[[3.8790,-77.0270],[3.8800,-77.0250],[3.8812,-77.0230]]'::jsonb),
@@ -43,9 +38,9 @@ INSERT INTO rutas (nombre, descripcion, tipo_servicio, estado, trazado) VALUES
 -- Barrios por ruta (RF-31)
 INSERT INTO ruta_barrios (ruta_id, barrio_id)
 SELECT r.id, b.id FROM (VALUES
-  ('Ruta 1 · Centro', 'Bellavista'), ('Ruta 1 · Centro', 'Lleras'), ('Ruta 1 · Centro', 'Pueblo Nuevo'),
-  ('Ruta 2 · Sur', 'Miraflores'), ('Ruta 2 · Sur', 'Cristal'), ('Ruta 2 · Sur', 'Rockefeller'),
-  ('Ruta 3 · Barrido Avenida', 'Santa Cruz'), ('Ruta 3 · Barrido Avenida', 'Alfonso López')
+  ('Ruta 1 · Centro', 'Bella Vista'), ('Ruta 1 · Centro', 'Alberto Lleras'), ('Ruta 1 · Centro', 'Kennedy'),
+  ('Ruta 2 · Sur', 'Miraflores'), ('Ruta 2 · Sur', 'El Cristal'), ('Ruta 2 · Sur', 'Rockefeller'),
+  ('Ruta 3 · Barrido Avenida', 'Santa Cruz'), ('Ruta 3 · Barrido Avenida', 'Alfonso López Pumarejo')
 ) AS x(ruta, barrio)
 JOIN rutas r ON r.nombre = x.ruta
 JOIN barrios b ON b.nombre = x.barrio;
@@ -53,11 +48,11 @@ JOIN barrios b ON b.nombre = x.barrio;
 -- Puntos de recoleccion (RF-17): ejemplos
 INSERT INTO puntos_recoleccion (barrio_id, nombre, referencia, latitud, longitud)
 SELECT b.id, x.nombre, x.referencia, x.lat, x.lng FROM (VALUES
-  ('Bellavista',   'Esquina del parque',  'Frente al parque principal', 3.8805, -77.0308),
-  ('Lleras',       'Calle 2 con carrera 5', 'Junto a la tienda de la esquina', 3.8820, -77.0285),
-  ('Pueblo Nuevo', 'Cancha del barrio',   'Costado norte de la cancha', 3.8840, -77.0255),
+  ('Bella Vista',   'Esquina del parque',  'Frente al parque principal', 3.8805, -77.0308),
+  ('Alberto Lleras',       'Calle 2 con carrera 5', 'Junto a la tienda de la esquina', 3.8820, -77.0285),
+  ('Kennedy', 'Cancha del barrio',   'Costado norte de la cancha', 3.8840, -77.0255),
   ('Miraflores',   'Entrada principal',   'Cerca de la parada del bus', 3.8752, -77.0312),
-  ('Cristal',      'Punto del colegio',   'Frente a la porteria', 3.8735, -77.0285)
+  ('El Cristal',      'Punto del colegio',   'Frente a la porteria', 3.8735, -77.0285)
 ) AS x(barrio, nombre, referencia, lat, lng)
 JOIN barrios b ON b.nombre = x.barrio;
 
