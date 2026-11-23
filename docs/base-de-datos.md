@@ -125,8 +125,9 @@ erDiagram
 | 12 | `…012_crear-ultima-posicion` | Una fila por camión | RF-28, RF-29 |
 | 13 | `…013_vistas-y-funciones` | Vistas del dashboard y función de conflictos | RF-21 a RF-24 |
 | 14 | `…014_crear-localidades-comunas` | `localidades` (2) y `comunas` (12); `barrios.comuna_id` reemplaza la columna de texto `comuna` | RF-13, RF-31 |
+| 15 | `…015_dashboard-servicios-hoy` | Vista `v_rutas_sector` y funciones `fn_programaciones_en_curso`, `fn_servicios_hoy` y `fn_dashboard_resumen` (hora de `America/Bogota`) | RF-22 a RF-24 |
 
-Todas tienen sección `-- Down Migration`; se probó aplicar las 14, deshacerlas todas y volver a aplicarlas.
+Todas tienen sección `-- Down Migration`; se probó aplicar las 15, deshacerlas todas y volver a aplicarlas.
 
 ## 4. Reglas que garantiza la base de datos
 
