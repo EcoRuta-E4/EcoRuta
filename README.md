@@ -54,14 +54,32 @@ docs/evidencia/       Capturas y videos de cada entrega
 
 ## Cómo ejecutar el proyecto
 
-_Pendiente: se completa en la entrega 1 con los comandos reales del backend y el frontend._
+**Requisitos:** Node.js (versión LTS), Git y una base de datos PostgreSQL (Neon o local). Se usan dos terminales abiertas al mismo tiempo, una para el backend y otra para el frontend.
 
-1. Requisitos.
-2. Variables de entorno: copiar `.env.example` a `.env` y completar los valores.
-3. Crear la base de datos y correr las migraciones.
-4. Cargar los datos de prueba.
-5. Crear el administrador inicial.
-6. Iniciar backend y frontend.
+1. **Clonar** el repositorio y entrar a la carpeta.
+2. **Variables de entorno del backend:** en `backend/`, copiar `.env.example` como `.env` y completar:
+   - `DATABASE_URL`: cadena de conexión de PostgreSQL (en Neon, la conexión directa, sin `-pooler`, con `?sslmode=require`).
+   - `JWT_SECRET`: una cadena larga y aleatoria. Sin ella, el login responde 500.
+   - `ADMIN_EMAIL`, `ADMIN_PASSWORD` y `ADMIN_NOMBRE`: datos del administrador inicial (la contraseña, de al menos 8 caracteres).
+3. **Variables de entorno del frontend:** en `frontend/`, copiar `.env.example` como `.env`. `VITE_API_URL` debe apuntar al backend (`http://localhost:3000`).
+4. **Terminal 1, backend:**
+   ```bash
+   cd backend
+   npm install
+   npm run migrate up     # crea las tablas, vistas y funciones desde cero
+   npm run seed           # datos de prueba (con -- --reset vacía y recarga)
+   npm run crear-admin    # crea el administrador inicial con ADMIN_EMAIL y ADMIN_PASSWORD
+   npm run dev            # API en http://localhost:3000
+   ```
+5. **Terminal 2, frontend:**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev            # interfaz en http://localhost:5173
+   ```
+6. Abrir `http://localhost:5173` e iniciar sesión con el administrador del paso 4.
+
+Nunca se suben a GitHub los archivos `.env` ni la cadena de conexión.
 
 ## Cómo correr las pruebas
 
@@ -98,7 +116,13 @@ duplicados con `23505`).
 
 ## Verificación del acceso administrativo
 
-_Pendiente (Entrega 1): pasos para iniciar y cerrar sesión, ver el bloqueo de rutas sin sesión y abrir el dashboard._
+1. Abrir `http://localhost:5173/login`.
+2. Probar una contraseña incorrecta: aparece «Correo o contraseña incorrectos» y no se crea sesión.
+3. Entrar con las credenciales correctas: se abre `/dashboard` con el menú (Vehículos, Conductores, Barrios y Rutas, Mapa de Rutas, Programación y Simulación) y los indicadores del backend.
+4. Pulsar «Cerrar sesión»: se borra el token y la aplicación vuelve a `/login`.
+5. Sin sesión, abrir `http://localhost:5173/dashboard`: redirige a `/login` con el aviso «Inicia sesión para continuar».
+
+Las capturas de esta verificación están en [`docs/evidencia/entrega-1/`](docs/evidencia/entrega-1/README.md).
 
 ## URLs públicas
 
