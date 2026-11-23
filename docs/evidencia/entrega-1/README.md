@@ -76,6 +76,8 @@ de los endpoints. Su detalle está en [`equipo/README.md`](equipo/README.md).
 | #8 | Endpoints del dashboard y colección Thunder (ECO-12) | `feature/ECO-12-endpoints-dashboard` |
 | #9 | Login, bloqueo de rutas y dashboard del panel (ECO-4) | `feature/ECO-4-login-dashboard` |
 | #10 | Suite de pruebas y registro de evidencia | `test/pruebas-entrega-1` |
+| #11 | Ajustes de estilo del menú lateral y actualización de logos (ECO-4) | `feature/ECO-4-ajustes-dashboard` |
+| #12 | Evidencias de la entrega 1 y README con instrucciones de ejecución | `docs/ECO-evidencias-entrega-1` |
 
 El detalle de quién escribió cada cambio está en la pestaña *Contributors* del repositorio y en el historial de cada pull request.
 
