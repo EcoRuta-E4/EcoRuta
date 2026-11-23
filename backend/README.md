@@ -49,7 +49,7 @@ npm run dev
 # Iniciar en producción
 npm start
 
-# Ejecutar pruebas automatizadas (42 tests, no necesitan base de datos)
+# Ejecutar pruebas automatizadas (56 en total: 54 activas y 2 de integración omitidas sin base)
 npm test
 
 # Crear o actualizar el administrador inicial (RF-05)
@@ -165,7 +165,26 @@ Filtros opcionales por query (un valor vacío se ignora):
 
 ---
 
-## 4. Pruebas manuales
+## 4. Pruebas
+
+### Automáticas (Vitest + Supertest)
+
+```bash
+cd backend
+npm install
+npm test            # 54 aprobadas sin base; no necesita base de datos
+npm run test:watch  # modo interactivo
+```
+
+La capa `pg` se simula con `vi.mock`. Si se define `TEST_DATABASE_URL` con un PostgreSQL alcanzable
+(rama `test` de Neon o base local), se ejecutan además 2 pruebas de integración reales que crean y
+eliminan un usuario temporal: la suite completa queda en **56/56**. Registro de casos, resultados y
+evidencia: [`../docs/pruebas.md`](../docs/pruebas.md).
+
+Pendiente por dependencia del backend: pruebas de vehículos y conductores (RNF-16), porque los
+endpoints aún no existen en `Dev`. Las restricciones `UNIQUE` de la base sí están verificadas.
+
+### Manuales
 
 Puedes importar la colección preconfigurada para Thunder Client en VS Code o Postman desde el archivo:
 `backend/thunder-collection_ecoruta_auth.json`. Incluye el login, los endpoints del dashboard (ECO-12) y los casos 401 y 400. Pega el token del login en el encabezado `Authorization` de cada petición.
