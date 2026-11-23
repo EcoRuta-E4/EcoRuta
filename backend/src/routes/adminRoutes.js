@@ -1,11 +1,14 @@
 import { Router } from 'express';
 import { autenticar } from '../middlewares/autenticar.js';
 import { soloAdmin } from '../middlewares/soloAdmin.js';
-import { query } from '../config/db.js';
+import { validarConsulta } from '../middlewares/validar.js';
+import { obtenerResumen, listarServiciosHoy } from '../controllers/dashboardController.js';
+import { serviciosHoySchema } from '../schemas/dashboardSchemas.js';
 
 const router = Router();
 
-// Todas las rutas de este router requieren autenticación y rol de administrador (RF-04)
+// Todas las rutas de este router requieren autenticación y rol de administrador (RF-04):
+// 401 si no hay token o es inválido, 403 si el usuario no es administrador.
 router.use(autenticar, soloAdmin);
 
 /**
@@ -19,26 +22,10 @@ router.get('/verificar', (req, res) => {
   });
 });
 
-/**
- * Resumen del panel administrativo (RF-04, conecta con v_resumen_dashboard si existe)
- */
-router.get('/dashboard-resumen', async (req, res, next) => {
-  try {
-    const { rows } = await query('SELECT * FROM v_resumen_dashboard LIMIT 1');
-    return res.status(200).json({
-      mensaje: 'Datos del resumen del panel obtenidos correctamente.',
-      datos: rows[0] || {},
-    });
-  } catch (error) {
-    // Si la vista aún no está creada en la base de datos, informarlo limpiamente
-    if (error.code === '42P01') {
-      return res.status(200).json({
-        mensaje: 'Panel de administración accesible. (La vista v_resumen_dashboard aún no ha sido migrada).',
-        datos: null,
-      });
-    }
-    next(error);
-  }
-});
+// Indicadores del dashboard con datos reales (RF-22 a RF-24)
+router.get('/dashboard-resumen', obtenerResumen);
+
+// Servicios programados de hoy, con filtros por zona, comuna y estado (RF-23, RF-24)
+router.get('/servicios-hoy', validarConsulta(serviciosHoySchema), listarServiciosHoy);
 
 export default router;
