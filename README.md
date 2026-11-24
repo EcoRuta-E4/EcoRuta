@@ -204,7 +204,7 @@ Las credenciales de demostración se envían por Teams el día de cada cierre.
 
 | Entrega | Contenido | Cierre | Release | Estado |
 |---------|-----------|--------|---------|--------|
-| 1 | Acceso administrativo | lun 23 nov 2026 | `semana-1` | En proceso |
+| 1 | Acceso administrativo | lun 23 nov 2026 | `semana-1` | Entregada |
 | 2 | Vehículos, conductores y dashboard | lun 30 nov 2026 | `semana-2` | Pendiente |
 | 3 | Rutas, mapa y primera URL pública | lun 7 dic 2026 | `semana-3` | Pendiente |
 | 4 | Programación y cierre | lun 14 dic 2026 | `semana-4` | Pendiente |
