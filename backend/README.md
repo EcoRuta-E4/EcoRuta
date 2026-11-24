@@ -22,7 +22,7 @@ Módulo de servidor y API REST para EcoRuta (Seminario de Actualización I · Un
 ## 2. Puesta en marcha
 
 ### Variables de entorno
-Copia `.env.example` a `.env` dentro de `backend/` (o en la raíz):
+Copia `.env.example` a `.env` dentro de `backend/` (los scripts no leen un `.env` en la raíz):
 
 ```bash
 cp .env.example .env
