@@ -204,3 +204,24 @@ Para la API en vivo: `npm run dev` y luego `npm run test:live` en otra terminal 
 con `DATABASE_URL` y un administrador creado con `npm run crear-admin`).
 
 Con la base local arrancada (sección 4.2), todos los comandos de esta página funcionan tal cual.
+
+## 7. Prueba desde cero del README (ECO-35)
+
+Prueba de «Cómo ejecutar el proyecto» hecha el 2026-11-23 por Rubén Alberto Camacho Benitez (@RCamaB22): rama `Dev` clonada en una carpeta nueva, base PostgreSQL vacía (rama nueva en Neon, conexión directa sin `-pooler`) y Node.js 22.
+
+| Paso | Comando | Resultado esperado | Estado |
+|---|---|---|---|
+| Migraciones | `npm run migrate up` | 15 migraciones y `Migrations complete!` | Aprobado |
+| Datos de prueba | `npm run seed` | `Datos de prueba listos.` | Aprobado |
+| Administrador | `npm run crear-admin` | `Administrador listo: <correo>` | Aprobado |
+| Suite | `npm test` | Vitest sin fallos (sin `TEST_DATABASE_URL`, las 2 de integración se omiten) | Aprobado |
+| API en vivo | `npm run test:live` | 8 pasos con `OK` | Aprobado |
+| Interfaz | Login, clave incorrecta, ruta protegida y cierre de sesión en `http://localhost:5173` | Coincide con «Verificación del acceso administrativo» | Aprobado |
+
+Problemas que aparecieron al seguir el README y su solución:
+
+| Problema | Causa | Solución |
+|---|---|---|
+| `The DATABASE_URL environment variable is not set` al correr `npm run migrate up` | El `.env` estaba en la raíz y los scripts solo lo leen desde `backend/` | Moverlo a `backend/.env`; el README del backend quedó corregido |
+| `Los datos de prueba ya existen` al repetir `npm run seed` | La base ya tenía los datos | `npm run seed -- --reset` (no borra el administrador) |
+| Aviso `SECURITY WARNING` de `pg` al conectar con Neon | La cadena usa `sslmode=require` | No impide nada; se quita con `sslmode=verify-full` |
