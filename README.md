@@ -54,32 +54,101 @@ docs/evidencia/       Capturas y videos de cada entrega
 
 ## Cómo ejecutar el proyecto
 
-**Requisitos:** Node.js (versión LTS), Git y una base de datos PostgreSQL (Neon o local). Se usan dos terminales abiertas al mismo tiempo, una para el backend y otra para el frontend.
+Probado desde cero con una base de datos vacía, clonando la rama `Dev` en una carpeta nueva (ECO-35).
 
-1. **Clonar** el repositorio y entrar a la carpeta.
-2. **Variables de entorno del backend:** en `backend/`, copiar `.env.example` como `.env` y completar:
-   - `DATABASE_URL`: cadena de conexión de PostgreSQL (en Neon, la conexión directa, sin `-pooler`, con `?sslmode=require`).
-   - `JWT_SECRET`: una cadena larga y aleatoria. Sin ella, el login responde 500.
-   - `ADMIN_EMAIL`, `ADMIN_PASSWORD` y `ADMIN_NOMBRE`: datos del administrador inicial (la contraseña, de al menos 8 caracteres).
-3. **Variables de entorno del frontend:** en `frontend/`, copiar `.env.example` como `.env`. `VITE_API_URL` debe apuntar al backend (`http://localhost:3000`).
-4. **Terminal 1, backend:**
-   ```bash
-   cd backend
-   npm install
-   npm run migrate up     # crea las tablas, vistas y funciones desde cero
-   npm run seed           # datos de prueba (con -- --reset vacía y recarga)
-   npm run crear-admin    # crea el administrador inicial con ADMIN_EMAIL y ADMIN_PASSWORD
-   npm run dev            # API en http://localhost:3000
-   ```
-5. **Terminal 2, frontend:**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev            # interfaz en http://localhost:5173
-   ```
-6. Abrir `http://localhost:5173` e iniciar sesión con el administrador del paso 4.
+### 1. Requisitos
 
-Nunca se suben a GitHub los archivos `.env` ni la cadena de conexión.
+- Node.js LTS (probado con la versión 22) y npm.
+- Git.
+- Una base PostgreSQL vacía: una rama nueva en Neon o PostgreSQL instalado en el equipo.
+- Visual Studio Code con la extensión Thunder Client (opcional, para probar a mano).
+
+### 2. Clonar el repositorio
+
+```bash
+git clone -b Dev https://github.com/EcoRuta-E4/EcoRuta.git
+cd EcoRuta
+```
+
+### 3. Crear la base de datos
+
+**En Neon:** crear una rama nueva (por ejemplo `prueba-local`), entrar a **Connect** y copiar la cadena de conexión con la opción **Connection pooling desactivada**. La cadena directa no lleva `-pooler` en el host. Debe terminar en `?sslmode=require`.
+
+**En PostgreSQL local:**
+
+```sql
+CREATE DATABASE ecoruta;
+```
+
+### 4. Variables de entorno del backend
+
+El archivo `.env` va dentro de `backend/`. Los scripts se ejecutan desde esa carpeta y no leen un `.env` en la raíz.
+
+```bash
+cd backend
+cp ../.env.example .env
+```
+
+En Windows (CMD) se usa `copy ..\.env.example .env`.
+
+Abrir `backend/.env` y cambiar como mínimo:
+
+- `DATABASE_URL`: la cadena directa de Neon o `postgresql://usuario:contrasena@localhost:5432/ecoruta` si es local.
+- `JWT_SECRET`: cualquier texto largo.
+- `ADMIN_EMAIL` y `ADMIN_PASSWORD`: correo y clave del administrador inicial (la clave con 8 caracteres o más).
+
+El `.env` nunca se sube a GitHub (ya está en `.gitignore`).
+
+### 5. Instalar, migrar, cargar datos y crear el administrador
+
+Todo desde `backend/`:
+
+```bash
+npm install
+npm run migrate up      # crea las tablas, vistas y funciones (15 migraciones)
+npm run seed            # carga la geografía y los datos de prueba
+npm run crear-admin     # crea o actualiza el administrador del .env
+```
+
+Cada comando termina con `Migrations complete!`, `Datos de prueba listos.` y `Administrador listo: <correo>`.
+
+Para volver a cargar los datos de prueba sobre una base que ya los tiene: `npm run seed -- --reset` (no borra el administrador).
+
+### 6. Iniciar el backend y probarlo
+
+```bash
+npm run dev             # http://localhost:3000
+```
+
+En otra terminal, también desde `backend/`:
+
+```bash
+npm test                # suite de Vitest (ver «Cómo correr las pruebas»)
+npm run test:live       # login, perfil, rutas protegidas, dashboard y logout contra la base del .env
+```
+
+`npm run test:live` debe mostrar los 8 pasos con `OK`. Para probar a mano, importar `backend/thunder-collection_ecoruta_auth.json` en Thunder Client, ejecutar el login con el correo y la clave del `.env` y pegar el token en el encabezado `Authorization: Bearer <token>` de las demás peticiones. `GET http://localhost:3000/api/health` responde `{"estado":"ok", ...}`.
+
+### 7. Iniciar el frontend
+
+Con el backend corriendo, en otra terminal:
+
+```bash
+cd frontend
+npm install
+cp .env.example .env    # VITE_API_URL=http://localhost:3000
+npm run dev             # http://localhost:5173
+```
+
+Entrar a `http://localhost:5173/login` con el administrador creado en el paso 5.
+
+### Problemas encontrados al probar
+
+| Problema | Causa | Solución |
+|---|---|---|
+| `The DATABASE_URL environment variable is not set` al correr `npm run migrate up` | El `.env` estaba en la raíz del repositorio | Moverlo a `backend/.env` |
+| `Los datos de prueba ya existen` al repetir `npm run seed` | La base ya tenía los datos | `npm run seed -- --reset` |
+| Aviso `SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'` al conectar con Neon | Mensaje de la librería `pg` por usar `sslmode=require` en la cadena | No impide nada; se puede quitar cambiando el final de la cadena a `?sslmode=verify-full` |
 
 ## Cómo correr las pruebas
 
