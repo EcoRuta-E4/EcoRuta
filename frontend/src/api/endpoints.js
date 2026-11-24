@@ -6,11 +6,12 @@ import { apiFetch } from './client.js';
  *     200 -> { mensaje, token, usuario: { id, nombre, correo, rol } }
  *     401 -> { error, mensaje }
  *   GET  /api/admin/dashboard-resumen   (Authorization: Bearer <token>, solo rol admin)
- *     200 -> { mensaje, datos: { ...columnas de fn_dashboard_resumen() } | null }
- *   GET  /api/admin/servicios-hoy       (mismo Bearer; ruta SUPUESTA, confirmar con Fernando)
- *     200 -> { datos: [ { id, ruta_id, ruta, sector, zona, comuna_id, comuna, vehiculo, conductor,
+ *     200 -> { mensaje, datos: { ...columnas de fn_dashboard_resumen() } }
+ *   GET  /api/admin/servicios-hoy       (mismo Bearer; solo rol admin; filtros opcionales: zona, comuna_id, estado)
+ *     200 -> { datos: [ { id, ruta_id, ruta, sector, zona, comuna, vehiculo, conductor,
  *                         hora_inicio, hora_fin, estado: 'en_curso'|'programada'|'conflicto' } ] }
  */
+
 export const ENDPOINTS = {
   LOGIN: '/api/auth/login',
   RESUMEN: '/api/admin/dashboard-resumen',
