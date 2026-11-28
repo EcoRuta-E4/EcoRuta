@@ -1,6 +1,6 @@
 {
   "clientName": "Thunder Client",
-  "collectionName": "EcoRuta - Autenticación, Admin y Dashboard (ECO-3, ECO-12)",
+  "collectionName": "EcoRuta - Autenticación, Admin, Dashboard y Vehículos (ECO-3, ECO-8, ECO-12)",
   "collectionId": "ecoruta-auth-eco-3",
   "dateExported": "2026-11-21T22:45:00.000Z",
   "version": "1.1",
@@ -216,6 +216,135 @@
       "created": "2026-11-23T15:00:00.000Z",
       "modified": "2026-11-23T15:00:00.000Z",
       "headers": []
+    },
+    {
+      "_id": "req-vehiculos-listar",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "14. Vehículos - Listar activos (RF-07)",
+      "url": "http://localhost:3000/api/admin/vehiculos",
+      "method": "GET",
+      "sortNum": 140000,
+      "created": "2026-11-28T05:30:00.000Z",
+      "modified": "2026-11-28T05:30:00.000Z",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer PEGA_AQUI_TU_TOKEN_JWT"
+        }
+      ]
+    },
+    {
+      "_id": "req-vehiculos-crear",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "15. Vehículos - Registrar vehículo (RF-07, RF-09)",
+      "url": "http://localhost:3000/api/admin/vehiculos",
+      "method": "POST",
+      "sortNum": 150000,
+      "created": "2026-11-28T05:30:00.000Z",
+      "modified": "2026-11-28T05:30:00.000Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer PEGA_AQUI_TU_TOKEN_JWT"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"placa\": \"EKO-901\",\n  \"numero_interno\": \"C-09\",\n  \"marca\": \"Hino\",\n  \"modelo\": \"500 Compactador\",\n  \"capacidad_toneladas\": 12,\n  \"estado\": \"disponible\"\n}",
+        "form": []
+      }
+    },
+    {
+      "_id": "req-vehiculos-placa-duplicada",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "16. Vehículos - Placa repetida (debe dar 409) (RF-08)",
+      "url": "http://localhost:3000/api/admin/vehiculos",
+      "method": "POST",
+      "sortNum": 160000,
+      "created": "2026-11-28T05:30:00.000Z",
+      "modified": "2026-11-28T05:30:00.000Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer PEGA_AQUI_TU_TOKEN_JWT"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"placa\": \"TUR101\",\n  \"marca\": \"Chevrolet\",\n  \"estado\": \"disponible\"\n}",
+        "form": []
+      }
+    },
+    {
+      "_id": "req-vehiculos-detalle",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "17. Vehículos - Consultar por ID (RF-07)",
+      "url": "http://localhost:3000/api/admin/vehiculos/1",
+      "method": "GET",
+      "sortNum": 170000,
+      "created": "2026-11-28T05:30:00.000Z",
+      "modified": "2026-11-28T05:30:00.000Z",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer PEGA_AQUI_TU_TOKEN_JWT"
+        }
+      ]
+    },
+    {
+      "_id": "req-vehiculos-editar-estado",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "18. Vehículos - Cambiar estado operativo (RF-09)",
+      "url": "http://localhost:3000/api/admin/vehiculos/1/estado",
+      "method": "PATCH",
+      "sortNum": 180000,
+      "created": "2026-11-28T05:30:00.000Z",
+      "modified": "2026-11-28T05:30:00.000Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer PEGA_AQUI_TU_TOKEN_JWT"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"estado\": \"mantenimiento\"\n}",
+        "form": []
+      }
+    },
+    {
+      "_id": "req-vehiculos-desactivar",
+      "colId": "ecoruta-auth-eco-3",
+      "containerId": "",
+      "name": "19. Vehículos - Desactivar sin borrar (RF-07)",
+      "url": "http://localhost:3000/api/admin/vehiculos/1/desactivar",
+      "method": "PATCH",
+      "sortNum": 190000,
+      "created": "2026-11-28T05:30:00.000Z",
+      "modified": "2026-11-28T05:30:00.000Z",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer PEGA_AQUI_TU_TOKEN_JWT"
+        }
+      ]
     }
   ]
 }

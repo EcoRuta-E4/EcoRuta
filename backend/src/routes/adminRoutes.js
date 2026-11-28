@@ -4,6 +4,7 @@ import { soloAdmin } from '../middlewares/soloAdmin.js';
 import { validarConsulta } from '../middlewares/validar.js';
 import { obtenerResumen, listarServiciosHoy } from '../controllers/dashboardController.js';
 import { serviciosHoySchema } from '../schemas/dashboardSchemas.js';
+import vehiculosRoutes from '../modules/vehiculos/vehiculos.routes.js';
 
 const router = Router();
 
@@ -27,5 +28,8 @@ router.get('/dashboard-resumen', obtenerResumen);
 
 // Servicios programados de hoy, con filtros por zona, comuna y estado (RF-23, RF-24)
 router.get('/servicios-hoy', validarConsulta(serviciosHoySchema), listarServiciosHoy);
+
+// Gestión de vehículos con placa única y estados (RF-07 a RF-09)
+router.use('/vehiculos', vehiculosRoutes);
 
 export default router;
