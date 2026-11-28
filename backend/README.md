@@ -17,6 +17,13 @@ Módulo de servidor y API REST para EcoRuta (Seminario de Actualización I · Un
 - La lógica vive en la migración `1795219200015_dashboard-servicios-hoy.sql` (vista `v_rutas_sector` y funciones `fn_programaciones_en_curso`, `fn_servicios_hoy` y `fn_dashboard_resumen`). Antes de probar, ejecuta `npm run migrate up`.
 - **Zona horaria:** "hoy" y "ahora" se calculan en `America/Bogota`. Neon trabaja en UTC y, sin este ajuste, después de las 7:00 p. m. el servidor ya vería el día siguiente.
 
+## 1.2 API de vehículos (ECO-8)
+
+- **RF-07 a RF-09, RNF-04:** CRUD en `backend/src/modules/vehiculos/` sobre la tabla `vehiculos` (`database/migrations/1795219200002_crear-vehiculos.sql`).
+- **Placa única:** la placa se normaliza a mayúsculas y la restricción `UNIQUE` de PostgreSQL (`23505`) responde **409 Conflict** en español.
+- **Estados operativos:** `disponible`, `en_servicio`, `mantenimiento`, `fuera_de_servicio` validados con Zod y `CHECK`.
+- **Desactivación lógica:** desactivar cambia `activo = FALSE` sin eliminar el historial.
+
 ---
 
 ## 2. Puesta en marcha
@@ -49,7 +56,7 @@ npm run dev
 # Iniciar en producción
 npm start
 
-# Ejecutar pruebas automatizadas (56 en total: 54 activas y 2 de integración omitidas sin base)
+# Ejecutar pruebas automatizadas (103 en total: 101 activas y 2 de integración omitidas sin base)
 npm test
 
 # Crear o actualizar el administrador inicial (RF-05)
@@ -78,6 +85,13 @@ npm run migrate up
 | `GET` | `/api/admin/verificar` | Admin (`Bearer` + `admin`) | Valida que el token pertenezca a un usuario con rol `admin`. |
 | `GET` | `/api/admin/dashboard-resumen` | Admin (`Bearer` + `admin`) | Indicadores del dashboard. Todos los valores son `number`. |
 | `GET` | `/api/admin/servicios-hoy` | Admin (`Bearer` + `admin`) | Servicios programados hoy. Filtros opcionales: `zona`, `comuna_id`, `estado`. |
+| `GET` | `/api/admin/vehiculos` | Admin (`Bearer` + `admin`) | Lista vehículos (por defecto activos). Filtros: `estado`, `activo` (`true`/`false`/`todos`), `buscar`. |
+| `GET` | `/api/admin/vehiculos/:id` | Admin (`Bearer` + `admin`) | Consulta el detalle de un vehículo por su `id`. |
+| `POST` | `/api/admin/vehiculos` | Admin (`Bearer` + `admin`) | Registra un vehículo (placa única → 409 si se repite). |
+| `PUT` / `PATCH` | `/api/admin/vehiculos/:id` | Admin (`Bearer` + `admin`) | Edita los datos o el estado de un vehículo. |
+| `PATCH` | `/api/admin/vehiculos/:id/estado` | Admin (`Bearer` + `admin`) | Cambia el estado operativo (`disponible`, `en_servicio`, `mantenimiento`, `fuera_de_servicio`). |
+| `DELETE` / `PATCH` | `/api/admin/vehiculos/:id` o `/desactivar` | Admin (`Bearer` + `admin`) | Desactiva el vehículo (`activo = FALSE`) sin borrar historial. |
+| `PATCH` | `/api/admin/vehiculos/:id/activar` | Admin (`Bearer` + `admin`) | Reactiva un vehículo desactivado (`activo = TRUE`). |
 
 Sin token responden **401**; con un usuario que no es administrador, **403**. Los errores tienen la forma `{ error, mensaje }` y `mensaje` está en español.
 
@@ -172,19 +186,18 @@ Filtros opcionales por query (un valor vacío se ignora):
 ```bash
 cd backend
 npm install
-npm test            # 54 aprobadas sin base; no necesita base de datos
+npm test            # 101 aprobadas sin base; no necesita base de datos
 npm run test:watch  # modo interactivo
 ```
 
 La capa `pg` se simula con `vi.mock`. Si se define `TEST_DATABASE_URL` con un PostgreSQL alcanzable
 (rama `test` de Neon o base local), se ejecutan además 2 pruebas de integración reales que crean y
-eliminan un usuario temporal: la suite completa queda en **56/56**. Registro de casos, resultados y
+eliminan un usuario temporal: la suite completa queda en **103/103**. Registro de casos, resultados y
 evidencia: [`../docs/pruebas.md`](../docs/pruebas.md).
 
-Pendiente por dependencia del backend: pruebas de vehículos y conductores (RNF-16), porque los
-endpoints aún no existen en `Dev`. Las restricciones `UNIQUE` de la base sí están verificadas.
+Pendiente por dependencia del backend: pruebas de conductores (RNF-16), porque sus endpoints aún no existen en `Dev`. Los endpoints de vehículos (`ECO-8`) ya cuentan con pruebas unitarias y de API en `tests/vehiculos.test.js`.
 
 ### Manuales
 
 Puedes importar la colección preconfigurada para Thunder Client en VS Code o Postman desde el archivo:
-`backend/thunder-collection_ecoruta_auth.json`. Incluye el login, los endpoints del dashboard (ECO-12) y los casos 401 y 400. Pega el token del login en el encabezado `Authorization` de cada petición.
+`backend/thunder-collection_ecoruta_auth.json`. Incluye el login, los endpoints del dashboard (ECO-12), el CRUD de vehículos (ECO-8) y los casos 401, 400 y 409. Pega el token del login en el encabezado `Authorization` de cada petición.
