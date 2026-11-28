@@ -6,6 +6,9 @@ import { SECCIONES } from '../components/nav.js';
 import HomePage from '../pages/publico/HomePage';
 import LoginPage from '../pages/publico/LoginPage';
 import DashboardPage from '../pages/admin/DashboardPage';
+import VehiculosPage from '../pages/admin/vehiculos/VehiculosPage';
+import RegistrarVehiculoPage from '../pages/admin/vehiculos/RegistrarVehiculoPage';
+import DetalleVehiculoPage from '../pages/admin/vehiculos/DetalleVehiculoPage';
 import SeccionPage from '../pages/admin/SeccionPage';
 
 export default function AppRouter() {
@@ -20,7 +23,11 @@ export default function AppRouter() {
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
-              {SECCIONES.filter((s) => s.to !== '/dashboard').map((s) => (
+              <Route path="/vehiculos" element={<VehiculosPage />} />
+              <Route path="/vehiculos/nuevo" element={<RegistrarVehiculoPage />} />
+              <Route path="/vehiculos/:id" element={<DetalleVehiculoPage />} />
+              <Route path="/vehiculos/:id/editar" element={<RegistrarVehiculoPage />} />
+              {SECCIONES.filter((s) => s.to !== '/dashboard' && s.to !== '/vehiculos').map((s) => (
                 <Route key={s.to} path={s.to} element={<SeccionPage />} />
               ))}
             </Route>
